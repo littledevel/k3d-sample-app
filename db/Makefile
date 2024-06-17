@@ -1,6 +1,7 @@
 # Oneshell permits to run more than one commands in a single shell session
 .ONESHELL:
 
+DB_PASSWORD:=$(shell cat ../secrets/db.pass)
 # make docker command creates a db docker
 # it starts by creating a network
 # then it mounts bind the local files my.cnf and init.sql to files inside the container
@@ -17,7 +18,7 @@ docker: clean image network
 
 # make image just builds our image
 image: 
-	docker build --build-arg DB_PASSWORD=mypass -t db .
+	docker build --build-arg DB_PASSWORD=$(DB_PASSWORD) -t db .
 
 # make network prepares the network
 network:
