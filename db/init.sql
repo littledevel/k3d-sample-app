@@ -1,3 +1,4 @@
+# This is the SQL script that will populate our db when it first starts
 CREATE DATABASE IF NOT EXISTS snm;
 USE snm;
 CREATE TABLE IF NOT EXISTS users(id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, name VARCHAR(50) NOT NULL, surname VARCHAR(200) NOT NULL, friends INT, home_page VARCHAR(255));

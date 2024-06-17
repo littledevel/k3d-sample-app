@@ -1,4 +1,10 @@
+# Oneshell permits to run more than one commands in a single shell session
 .ONESHELL:
+
+# make docker command creates a db docker
+# it starts by creating a network
+# then it mounts bind the local files my.cnf and init.sql to files inside the container
+# it also binds the folder data we create here in the container also to be used for mysql data
 docker: clean image network
 	mkdir -p data
 	docker run --name db \
@@ -9,12 +15,15 @@ docker: clean image network
 		--net=appnet \
 		-d db
 
+# make image just builds our image
 image: 
 	docker build -t db .
 
+# make network prepares the network
 network:
 	-docker network create -d bridge appnet
 
+# make clean to clean up resources
 clean:
 	-docker stop db
 	-docker rm -f db
