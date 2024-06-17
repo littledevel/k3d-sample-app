@@ -17,7 +17,7 @@ docker: clean image network
 
 # make image just builds our image
 image: 
-	docker build -t db .
+	docker build --build-arg DB_PASSWORD=mypass -t db .
 
 # make network prepares the network
 network:
@@ -27,4 +27,6 @@ network:
 clean:
 	-docker stop db
 	-docker rm -f db
+	-docker rmi -f db
+	-sudo rm -rvf data/*
 	-docker network rm appnet
