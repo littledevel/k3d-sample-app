@@ -1,4 +1,3 @@
-# We are using mysql 8
 FROM mysql:8
 # Using a random root password
 ENV MYSQL_RANDOM_ROOT_PASSWORD true
