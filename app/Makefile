@@ -3,7 +3,8 @@ PASSWORD:=$(shell cat ../secrets/db.pass)
 docker: clean image network
 	docker run --name app \
 		-p 6000:6000 \
-		--net appnet \
+		--net dbnet \
+		--net frontend \
 		-e APP_PORT=6000 \
 		-e DB_PASSWORD=$(PASSWORD)\
 		-d app
@@ -15,7 +16,8 @@ docker: clean image network
 #	. venv/bin/activate; cd src; pip install -Ur requirements.txt
 
 network:
-	-docker network create -d bridge appnet
+	-docker network create -d bridge dbnet
+	-docker network create -d bridge frontend
 
 image: 
 	docker build -t app .
@@ -25,4 +27,5 @@ clean:
 #	rm -rvf venv
 	-docker stop app
 	-docker rm -f app
-	-docker network rm appnet
+	-docker network rm dbnet
+	-docker network rm frontend

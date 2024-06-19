@@ -12,7 +12,7 @@ docker: clean image network
 		--mount type=bind,src=$(shell pwd)/my.cnf,dst=/etc/my.cnf \
 		--mount type=bind,src=$(shell pwd)/data,dst=/var/lib/mysql \
 		--mount type=bind,src=$(shell pwd)/init.sql,dst=/docker-entrypoint-initdb.d/01.sql \
-		--net=appnet \
+		--net=dbnet \
 		-d db
 
 # make image just builds our image
@@ -21,10 +21,10 @@ image:
 
 # make network prepares the network
 network:
-	-docker network create -d bridge appnet
+	-docker network create -d bridge dbnet
 
 # make clean to clean up resources
 clean:
 	-docker stop db
 	-docker rm -f db
-	-docker network rm appnet
+	-docker network rm dbnet
