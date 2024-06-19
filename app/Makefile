@@ -3,7 +3,6 @@ docker: clean image network
 		-p 6000:6000 \
 		--net appnet \
 		-e APP_PORT=6000 \
-		-e DB_PASSWORD=mypass\
 		-d app
 #run: venv
 #	. venv/bin/activate; cd src; python3 -m flask run 
