@@ -33,9 +33,6 @@ grafana:
 		--net dbnet \
 		-d grafana/grafana-oss
 
-
-		
-
 network:
 	-docker network create -d bridge dbnet
 	-docker network create -d bridge appnet
@@ -46,5 +43,7 @@ clean:
 	-docker rm -f prometheus
 	-docker stop cadvisor
 	-docker rm -f cadvisor
+	-docker stop grafana
+	-docker rm -f grafana
 	-docker network rm dbnet
 	-docker network rm appnet
