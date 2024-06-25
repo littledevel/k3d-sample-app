@@ -1,4 +1,5 @@
 PASSWORD:=$(shell cat ../secrets/db.pass)
+TAG?=latest
 
 docker: clean image network
 	docker run --name app \
@@ -20,7 +21,9 @@ network:
 	-docker network create -d bridge frontend
 
 image: 
-	docker build -t app .
+	docker build -t app:$(TAG) .
+	docker tag app:$(TAG) codehub-local:44599/app:$(TAG)
+	docker push codehub-local:44599/app:$(TAG)
 
 clean:
 #	-deactivate
@@ -29,3 +32,5 @@ clean:
 	-docker rm -f app
 	-docker network rm dbnet
 	-docker network rm frontend
+
+

@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: app
+  name: app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: app
+    spec:
+      containers:
+      - image: codehub-local:44599/app:1.0
+        name: app
+        resources: {}
