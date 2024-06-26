@@ -1,4 +1,4 @@
-
+TAG ?= latest
 docker: clean image network
 	docker run --name frontend \
 		-p 8000:80 \
@@ -12,7 +12,9 @@ network:
 	-docker network create -d bridge frontend
 
 image: 
-	docker build -t frontend .
+	docker build -t frontend:$(TAG) .
+	docker tag frontend:$(TAG) codehub-local:45539/frontend:$(TAG)
+	docker push codehub-local:45539/frontend:$(TAG)
 
 clean:
 	-docker stop frontend
