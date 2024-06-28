@@ -16,16 +16,21 @@ spec:
         app: frontend
     spec:
       containers:
-      - image: codehub-local:44599/frontend:1.1
+      - image: codehub-local:40000/frontend:1.1
         name: frontend
         resources: {}
         volumeMounts: 
           - name: nginx-config
             mountPath: /etc/nginx/conf.d/default.conf
             subPath: default.conf
+          - name: index-html
+            mountPath: /usr/share/nginx/html/index.php
+            subPath: index.php
+
       volumes:
         - name: nginx-config
           configMap:
-            name: nginx-conf.yaml
-
-        
+            name: default-conf
+        - name: index-html
+          configMap:
+            name: index-html

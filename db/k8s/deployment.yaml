@@ -16,6 +16,22 @@ spec:
         app: db
     spec:
       containers:
-      - image: codehub-local:44599/db:2.0
+      - image: codehub-local:40000/db:2.0
         name: db
         resources: {}
+        volumeMounts: 
+          - name: init-sql
+            mountPath: /docker-entrypoint-initdb.d/01.sql
+            subPath: 01.sql
+          - name: my-cnf
+            mountPath: /etc/my.cnf
+            subPath: my.cnf
+      volumes:
+        - name: init-sql
+          configMap:
+            name: init-sql
+        - name: my-cnf
+          configMap:
+            name: my-cnf
+
+

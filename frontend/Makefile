@@ -1,4 +1,4 @@
-TAG ?= latest
+TAG ?= 1.1
 
 docker: clean image network
 	docker run --name frontend \
@@ -14,8 +14,8 @@ network:
 
 image: 
 	docker build -t frontend:$(TAG) .
-	docker tag frontend:$(TAG) codehub-local:44599/frontend:$(TAG)
-	docker push codehub-local:44599/frontend:$(TAG)
+	docker tag frontend:$(TAG) codehub-local:40000/frontend:$(TAG)
+	docker push codehub-local:40000/frontend:$(TAG)
 
 
 

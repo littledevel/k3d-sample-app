@@ -1,5 +1,5 @@
 PASSWORD:=$(shell cat ../secrets/db.pass)
-TAG?=latest
+TAG?=1.0
 
 docker: clean image network
 	docker run --name app \
@@ -22,8 +22,8 @@ network:
 
 image: 
 	docker build -t app:$(TAG) .
-	docker tag app:$(TAG) codehub-local:44599/app:$(TAG)
-	docker push codehub-local:44599/app:$(TAG)
+	docker tag app:$(TAG) codehub-local:40000/app:$(TAG)
+	docker push codehub-local:40000/app:$(TAG)
 
 clean:
 #	-deactivate

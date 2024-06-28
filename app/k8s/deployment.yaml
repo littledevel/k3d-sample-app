@@ -16,6 +16,19 @@ spec:
         app: app
     spec:
       containers:
-      - image: codehub-local:44599/app:1.0
+      - image: codehub-local:40000/app:1.0
         name: app
         resources: {}
+        env:
+          - name: DB_USER
+            valueFrom:
+              secretKeyRef:
+                name: db-secrets
+                key: username
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: db-secrets
+                key: password
+
+
