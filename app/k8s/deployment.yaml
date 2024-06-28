@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: app
+  name: app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: app
+    spec:
+      containers:
+      - image: codehub-local:40000/app:1.3
+        name: app
+        resources: {}
+        env:
+          - name: DB_USER
+            valueFrom:
+              secretKeyRef:
+                name: db-secrets
+                key: username
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: db-secrets
+                key: password
+
+

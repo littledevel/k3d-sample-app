@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: db
+  name: db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: db
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: db
+    spec:
+      containers:
+      - image: codehub-local:40000/db:2.0
+        name: db
+        resources: {}
+        volumeMounts: 
+          - name: init-sql
+            mountPath: /docker-entrypoint-initdb.d/01.sql
+            subPath: 01.sql
+          - name: my-cnf
+            mountPath: /etc/my.cnf
+            subPath: my.cnf
+      volumes:
+        - name: init-sql
+          configMap:
+            name: init-sql
+        - name: my-cnf
+          configMap:
+            name: my-cnf
+
+

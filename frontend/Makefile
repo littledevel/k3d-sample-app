@@ -1,4 +1,5 @@
-TAG ?= latest
+TAG ?= 1.1
+
 docker: clean image network
 	docker run --name frontend \
 		-p 8000:80 \
@@ -13,8 +14,10 @@ network:
 
 image: 
 	docker build -t frontend:$(TAG) .
-	docker tag frontend:$(TAG) codehub-local:45539/frontend:$(TAG)
-	docker push codehub-local:45539/frontend:$(TAG)
+	docker tag frontend:$(TAG) codehub-local:40000/frontend:$(TAG)
+	docker push codehub-local:40000/frontend:$(TAG)
+
+
 
 clean:
 	-docker stop frontend
