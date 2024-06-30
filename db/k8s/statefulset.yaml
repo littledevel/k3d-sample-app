@@ -1,15 +1,14 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   labels:
     app: db
   name: db
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: db
-  strategy: {}
   template:
     metadata:
       labels:
@@ -26,6 +25,9 @@ spec:
           - name: my-cnf
             mountPath: /etc/my.cnf
             subPath: my.cnf
+          - name: my-data
+            mountPath: /var/lib/mysql
+            subPath: mysql
       volumes:
         - name: init-sql
           configMap:
@@ -33,5 +35,12 @@ spec:
         - name: my-cnf
           configMap:
             name: my-cnf
-
-
+  volumeClaimTemplates:
+  - metadata:
+      name: my-data
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      resources:
+        requests:
+          storage: 2Gi
+    
