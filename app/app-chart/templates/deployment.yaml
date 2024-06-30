@@ -5,7 +5,7 @@ metadata:
     app: app
   name: app
 spec:
-  replicas: 1
+  replicas: {{ .Values.replicas }}
   selector:
     matchLabels:
       app: app
@@ -16,12 +16,10 @@ spec:
         app: app
     spec:
       containers:
-      - image: codehub-local:40000/app:1.3
+      - image: {{ .Values.containers.image }}
         name: app
         resources: {}
         env:
-          - name: DB_ENV
-            value: {{ .Values.db-endpoint }}
           - name: DB_USER
             valueFrom:
               secretKeyRef:

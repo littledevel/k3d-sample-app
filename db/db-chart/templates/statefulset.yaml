@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    app: db
+  name: db
+spec:
+  replicas: {{ .Values.replicas }}
+  selector:
+    matchLabels:
+      app: db
+  template:
+    metadata:
+      labels:
+        app: db
+    spec:
+      initContainers:
+      - name: init-mysql
+        image: {{ .Values.initContainers.image }}
+        command:
+        - bash
+        - "-c"
+        - |
+          set -ex
+          # Generate mysql server-id from pod ordinal index.
+          [[ $HOSTNAME =~ -([0-9]+)$ ]] || exit 1
+          ordinal=${BASH_REMATCH[1]}
+          echo [mysqld] > /mnt/conf.d/server-id.cnf
+          # Add an offset to avoid reserved server-id=0 value.
+          echo server-id=$((100 + $ordinal)) >> /mnt/conf.d/server-id.cnf
+          # Copy appropriate conf.d files from config-map to emptyDir.
+          if [[ $ordinal -eq 0 ]]; then
+            cp /mnt/config-map/primary.cnf /mnt/conf.d/
+          else
+            cp /mnt/config-map/replica.cnf /mnt/conf.d/
+          fi          
+        volumeMounts:
+        - name: conf
+          mountPath: /mnt/conf.d
+        - name: my-cnf
+          mountPath: /mnt/config-map
+      containers:
+      - image: {{ .Values.containers.image }}
+        name: db
+        volumeMounts: 
+          - name: init-sql
+            mountPath: /docker-entrypoint-initdb.d/01.sql
+            subPath: 01.sql
+          - name: conf
+            mountPath: /etc/mysql/conf.d
+          - name: my-data
+            mountPath: /var/lib/mysql
+            subPath: mysql
+      volumes:
+        - name: init-sql
+          configMap:
+            name: init-sql
+        - name: my-cnf
+          configMap:
+            name: my-cnf
+        - name: conf
+          emptyDir: {}
+  volumeClaimTemplates:
+  - metadata:
+      name: my-data
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      resources:
+        requests:
+          storage: {{ .Values.storage.size }}
+    
