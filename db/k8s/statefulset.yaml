@@ -14,6 +14,31 @@ spec:
       labels:
         app: db
     spec:
+      initContainers:
+      - name: init-mysql
+        image: mysql:8
+        command:
+        - bash
+        - "-c"
+        - |
+          set -ex
+          # Generate mysql server-id from pod ordinal index.
+          [[ $HOSTNAME =~ -([0-9]+)$ ]] || exit 1
+          ordinal=${BASH_REMATCH[1]}
+          echo [mysqld] > /mnt/conf.d/server-id.cnf
+          # Add an offset to avoid reserved server-id=0 value.
+          echo server-id=$((100 + $ordinal)) >> /mnt/conf.d/server-id.cnf
+          # Copy appropriate conf.d files from config-map to emptyDir.
+          if [[ $ordinal -eq 0 ]]; then
+            cp /mnt/config-map/primary.cnf /mnt/conf.d/
+          else
+            cp /mnt/config-map/replica.cnf /mnt/conf.d/
+          fi          
+        volumeMounts:
+        - name: conf
+          mountPath: /mnt/conf.d
+        - name: my-cnf
+          mountPath: /mnt/config-map
       containers:
       - image: codehub-local:40000/db:2.0
         name: db
@@ -22,9 +47,8 @@ spec:
           - name: init-sql
             mountPath: /docker-entrypoint-initdb.d/01.sql
             subPath: 01.sql
-          - name: my-cnf
-            mountPath: /etc/my.cnf
-            subPath: my.cnf
+          - name: conf
+            mountPath: /etc/mysql/conf.d
           - name: my-data
             mountPath: /var/lib/mysql
             subPath: mysql
@@ -35,6 +59,8 @@ spec:
         - name: my-cnf
           configMap:
             name: my-cnf
+        - name: conf
+          emptyDir: {}
   volumeClaimTemplates:
   - metadata:
       name: my-data
