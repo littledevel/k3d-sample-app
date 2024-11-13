@@ -1,4 +1,4 @@
-# PersonBook
+# k3d-sample-app
 
 A project to understand Docker and Kubernetes.
 Most work can be done through the Makefiles.
