@@ -3,6 +3,6 @@ replicas: 3
 initContainers:
   image: "mysql:8"
 containers:
-  image: codehub-local:40000/db:2.0
+  image: brokenleg/db:2.0
 storage:
   size: 2Gi

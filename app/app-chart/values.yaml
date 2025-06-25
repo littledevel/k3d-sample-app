@@ -1,4 +1,4 @@
 replicas: 4
 containers:
-  image: brokenleg/app:1.3
-db-endpoint: db-read
+  image: brokenleg/app:1.4
+db-endpoint: db-read.db

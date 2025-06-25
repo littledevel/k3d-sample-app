@@ -1,5 +1,5 @@
 PASSWORD:=$(shell cat ../secrets/db.pass)
-TAG?=1.3
+TAG?=1.4
 
 docker: clean network image 
 	docker run --name app \
