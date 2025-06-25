@@ -1,4 +1,4 @@
 replicas: 4
 containers:
-  image: codehub-local:40000/app:1.3
+  image: brokenleg/app:1.3
 db-endpoint: db-read

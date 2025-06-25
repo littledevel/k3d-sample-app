@@ -3,10 +3,10 @@ TAG?=1.3
 
 docker: clean network image 
 	docker run --name app \
-		-p 6000:6000 \
+		-p 8000:8000 \
 		--net dbnet \
 		--net frontend \
-		-e APP_PORT=6000 \
+		-e APP_PORT=8000 \
 		-e DB_PASSWORD=$(PASSWORD)\
 		-d app:$(TAG)
 #run: venv
