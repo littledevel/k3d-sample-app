@@ -14,13 +14,13 @@ docker: clean image network
 		--mount type=bind,src=$(shell pwd)/data,dst=/var/lib/mysql \
 		--mount type=bind,src=$(shell pwd)/init.sql,dst=/docker-entrypoint-initdb.d/01.sql \
 		--net=dbnet \
-		-d db
+		-d db:$(TAG)
 
 # make image just builds our image
 image: 
 	docker build -t db:$(TAG) --build-arg DB_PASSWORD=$(PASSWORD) .
-	docker tag db:$(TAG) codehub-local:40000/db:$(TAG)
-	docker push codehub-local:40000/db:$(TAG)
+	docker tag db:$(TAG) brokenleg/db:$(TAG)
+	docker push brokenleg/db:$(TAG)
 
 
 

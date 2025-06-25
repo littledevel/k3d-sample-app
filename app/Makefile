@@ -1,14 +1,14 @@
 PASSWORD:=$(shell cat ../secrets/db.pass)
 TAG?=1.3
 
-docker: clean image network
+docker: clean network image 
 	docker run --name app \
 		-p 6000:6000 \
 		--net dbnet \
 		--net frontend \
 		-e APP_PORT=6000 \
 		-e DB_PASSWORD=$(PASSWORD)\
-		-d app
+		-d app:$(TAG)
 #run: venv
 #	. venv/bin/activate; cd src; python3 -m flask run 
 
@@ -22,8 +22,8 @@ network:
 
 image: 
 	docker build -t app:$(TAG) .
-	docker tag app:$(TAG) codehub-local:40000/app:$(TAG)
-	docker push codehub-local:40000/app:$(TAG)
+	docker tag app:$(TAG) brokenleg/app:$(TAG)
+	docker push brokenleg/app:$(TAG)
 
 clean:
 #	-deactivate

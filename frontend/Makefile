@@ -7,15 +7,15 @@ docker: clean image network
 		--mount type=bind,src=$(shell pwd)/default.conf,dst=/etc/nginx/conf.d/default.conf \
 		--mount type=bind,src=$(shell pwd)/index.html,dst=/usr/share/nginx/html/index.html \
 		--net frontend \
-		-d frontend
+		-d frontend:$(TAG)
 
 network:
 	-docker network create -d bridge frontend
 
 image: 
 	docker build -t frontend:$(TAG) .
-	docker tag frontend:$(TAG) codehub-local:40000/frontend:$(TAG)
-	docker push codehub-local:40000/frontend:$(TAG)
+	docker tag frontend:$(TAG) brokenleg/frontend:$(TAG)
+	docker push brokenleg/frontend:$(TAG)
 
 
 
