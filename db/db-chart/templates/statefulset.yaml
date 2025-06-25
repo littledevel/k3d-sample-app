@@ -39,6 +39,7 @@ spec:
           mountPath: /mnt/conf.d
         - name: my-cnf
           mountPath: /mnt/config-map
+          subPath: primary.cnf
       containers:
       - image: {{ .Values.containers.image }}
         name: db
@@ -51,6 +52,9 @@ spec:
           - name: my-data
             mountPath: /var/lib/mysql
             subPath: mysql
+          - name: my-cnf
+            mountPath: /etc/my.cnf
+            subPath: primary.cnf
       volumes:
         - name: init-sql
           configMap:

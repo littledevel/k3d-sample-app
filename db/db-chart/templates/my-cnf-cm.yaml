@@ -4,7 +4,7 @@ metadata:
   name: my-cnf
 data:
   primary.cnf: |
-    # Apply this config only on the primary.
+    # Apply this config only on the primary.1
     [mysqld]
     log-bin    
     bind-address = 0.0.0.0

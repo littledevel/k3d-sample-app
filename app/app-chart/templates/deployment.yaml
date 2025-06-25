@@ -20,6 +20,8 @@ spec:
         name: app
         resources: {}
         env:
+          - name: DB_HOST
+            value: {{ .Values.db_endpoint }}
           - name: DB_USER
             valueFrom:
               secretKeyRef:
